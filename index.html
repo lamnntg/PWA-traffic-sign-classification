@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Traffic Book</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom fonts for this template -->
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <!-- Plugin CSS -->
+    <link href="/vendor/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css">
+    <!-- Custom styles for this template -->
+    <link href="/css/freelancer.min.css" rel="stylesheet">
+    <link href="/manifest.json" rel="manifest">
+    <script src="/app.js"></script>
+</head>
+
+  <body id="page-top">
+      <!-- Navigation -->
+      <nav class="navbar navbar-expand-lg bg-secondary fixed-top font-weight-light " id="mainNav">
+          <div class="container">
+              <a class="navbar-brand js-scroll-trigger" href="#page-top">traffic book</a>
+          </div>
+      </nav>
+      <!-- Header -->
+      <header class="masthead bg-primary text-white text-center">
+          <div class="container">
+              <img class="profile img-fluid mb-0 d-block mx-auto" src="img/profile.png" alt="">
+              <h2 class="">______________</h2><br />
+              <h2 class="font-weight-light mb-0">Learn about traffic rules!</h2>
+          </div>
+      </header>
+
+      <!-- Todos Section-->
+      <section class="  mb-0" id="portfolio">
+          <div class="container">
+              <h2 class="text-center text-uppercase">Reminders</h2><br />
+              <div class="row">
+                  <div class="col-lg-4 ml-auto">
+                      <p class="lead">
+                          <div class="input-group">
+                              
+                              <input type="text" class="form-control form-control-lg" id="task"  placeholder="Add Reminder"  aria-describedby="inputGroupPrepend" required>
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text form-control-lg" id="inputGroupPrepend"><button class="btn" id="add"><i class="fa fa-plus"></i></button></span>
+                              </div>                          </div>
+                      </p>
+                  </div>
+                  <div class="col-lg-4 mr-auto">
+                      <p class="lead">
+                          <h3>Todo </h3>
+                          <div id="todos"></div>
+                      </p>
+                  </div>
+              </div>
+              <div class="text-center mt-4">
+                  <a class="btn btn-xl btn-outline-light" href="#">
+                  </a>
+              </div>
+          </div>
+      </section>
+
+      <div class="icon-bar bg-secondary fixed-bottom">
+          <a class="active" href="/index.html"><h4><i class="fa fa-home"></i></h4></a>
+          <a href="/trafficsigns.html"><h4><i class="fa fa-traffic-light"></i></h4></a>
+          <a href="/reviewer.html"><h4><i class="fa fa-book"></i></h4></a>
+          <a href="/camera.html"><h4><i class="fas fa-camera"></i></h4></a>
+          <a href="/map.html"><h4><i class="fa fa-map"></i></h4></a>
+      </div>
+
+
+      <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+      <div class="scroll-to-top d-lg-none position-fixed ">
+          <a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top">
+              <i class="fa fa-chevron-up"></i>
+          </a>
+      </div>
+      <!-- Bootstrap core JavaScript -->
+      <script src="vendor/jquery/jquery.min.js"></script>
+      <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+      <!-- Plugin JavaScript -->
+      <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+      <script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+      <!-- Custom scripts for this template -->
+      <script src="js/freelancer.min.js"></script>
+
+      <script>
+
+          function get_todos() {
+              var todos = new Array;
+              var todos_str = localStorage.getItem('todo');
+              if (todos_str !== null) {
+                  todos = JSON.parse(todos_str);
+              }
+              return todos;
+          }
+
+          function add() {
+              var task = document.getElementById('task').value;
+
+              var todos = get_todos();
+              todos.push(task);
+              localStorage.setItem('todo', JSON.stringify(todos));
+              document.getElementById('task').value = ' ';
+              show();
+             
+
+              return false;
+          }
+
+          function remove() {
+              var id = this.getAttribute('id');
+              var todos = get_todos();
+              todos.splice(id, 1);
+              localStorage.setItem('todo', JSON.stringify(todos));
+
+              show();
+
+              return false;
+          }
+
+          function show() {
+              var todos = get_todos();
+
+              var html = '<ul  class="w3-ul w3-border">';
+              for (var i = 0; i < todos.length; i++) {
+                  html += '<li>' + todos[i] + ' &nbsp; <button class="remove btn-circle btn-danger float-right" id="' + i + '"><i class="fa fa-times"></i></button></li>';
+              };
+              html += '</ul>';
+
+              document.getElementById('todos').innerHTML = html;
+              
+
+              var buttons = document.getElementsByClassName('remove');
+              for (var i = 0; i < buttons.length; i++) {
+                  buttons[i].addEventListener('click', remove);
+              };
+          }
+
+          document.getElementById('add').addEventListener('click', add);
+          show();
+      </script>
+  </body>
+
+</html>
