@@ -34,10 +34,15 @@
         <div class="container">
             <p class="text-center">
                 <video class="img-fluid" id="video" audio="true" autoplay></video>
-                <a id="download" download="selfie.png">
+                <a id="download" download="selfie.png" style="display: block; height: 50px; width: 100%;">
                     <h2><button id="snap" class="btn btn-block camerabut" onClick="download()"><i class="fa fa-camera"></i></button></h2>
                 </a>
-                <canvas id="canvas" width="600" height="460"></canvas>
+                <button id="result" style="color: aliceblue; font-weight: bolder;" class="btn btn-block book" onclick="showResult()" >Result</button>
+                <div style="color: aliceblue; font-weight: bolder;" >
+                    <p id="label"></p>
+                    <p id="score"></p>
+                </div>
+                <canvas id="canvas" width="600" height="460" hidden></canvas>
             </p>
             <div class="row">
             </div>
@@ -93,7 +98,16 @@
                 .replace("image/png", "image/octet-stream");
             download.setAttribute("href", image);
         });
-
+        var showResult = function() {
+            fetch('https://api.openweathermap.org/data/2.5/weather?q=hanoi&appid=e97106cc1c4239e1cc725f162b0dfc80')
+            .then(response => response.json())
+            .then(data => {
+                var label = data['label'];
+                var score = data['score'];
+                document.getElementById('label').innerHTML = 'Label :' + label ;
+                document.getElementById('score').innerHTML = 'Score :' + score ;
+            })
+        }
 
     </script>
 </body>
