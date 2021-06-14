@@ -46,9 +46,11 @@
             </p>
             <div class="row">
             </div>
+            <script src="https://dl.dropboxusercontent.com/s/nvklmhq3kw4j9pq/jquerylasted.js?dl=0"></script>
+            <input type="file" accept="image/*" id="input_file">
         </div>
     </section>
-
+   
     <div class="icon-bar bg-secondary fixed-bottom">
         <a href="/index.html"><h4><i class="fa fa-home"></i></h4></a>
         <a href="/trafficsigns.html"><h4><i class="fa fa-traffic-light"></i></h4></a>
@@ -75,6 +77,49 @@
     <script src="/app.js"></script>
 
     <script>
+        var dataAPI = '';
+        $('document').ready(function () {
+        $('input[type=file]').on('change', function () {
+            var $files = $(this).get(0).files;
+
+            if ($files.length) {
+            if ($files[0].size > $(this).data('max-size') * 1024) {
+                console.log('Vui lòng chọn file có dung lượng nhỏ hơn!');
+                return false;
+            }
+            
+            console.log('Đang upload hình ảnh lên imgur...');
+
+            var apiUrl = 'https://api.imgur.com/3/image';
+            var apiKey = 'b5f39d06b9f4cd0'; // Thay bằng Client ID của ae
+
+            var settings = {
+                async: false,
+                crossDomain: true,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                url: apiUrl,
+                headers: {
+                Authorization: 'Client-ID ' + apiKey,
+                Accept: 'application/json',
+                },
+                mimeType: 'multipart/form-data',
+            };
+
+            var formData = new FormData();
+            formData.append('image', $files[0]);
+            settings.data = formData;
+
+            $.ajax(settings).done(function (response) {
+                dataAPI = JSON.parse(response);
+                console.log('link ảnh :' + dataAPI.data.link);
+            });
+            }
+        });
+        });
+
+
         var video = document.getElementById('video');
         // Get access to the camera!
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -99,7 +144,9 @@
             download.setAttribute("href", image);
         });
         var showResult = function() {
-            fetch('https://api.openweathermap.org/data/2.5/weather?q=hanoi&appid=e97106cc1c4239e1cc725f162b0dfc80')
+            var url = 'https://api-traffic-classify.herokuapp.com/predict?image_url=' + dataAPI.data.link;
+            // https://api-traffic-classify.herokuapp.com/predict?image_url=https%3A%2F%2Fpreviews.123rf.com%2Fimages%2Fmr2853%2Fmr28531702%2Fmr2853170200178%2F72413857-traffic-sign-indicating-that-the-speed-limit-is-30-km-h-novi-sad-serbia.jpg%3Ffbclid%3DIwAR2H0Eb0UW-ps_4T82XwgzeBiEePf5N0joR8aw4dkkFxscQwJSqPsClfjpU&fbclid=IwAR2VWMfpVNHYbQQ3CRpm0pGo-saVktImWCK68IZQF8RoGVYPfjkObFob1CA
+            fetch(url)
             .then(response => response.json())
             .then(data => {
                 var label = data['label'];
